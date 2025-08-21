@@ -1,0 +1,146 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  9
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format      ascii;
+    class       dictionary;
+    location    "system";
+    object      fvSolution;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+solvers
+{
+    "alpha.water.*" //interFoam
+    {
+
+        cAlpha          1;
+        icAlpha         0;
+
+        MULESCorr       yes; // Switches on semi-implicit MULES
+        nAlphaSubCycles 1;   // 1 for semi-implicit MULES. >=2 for explicit MULES
+        nAlphaCorr      3;   // 2-3 for slow varying flows, >=3 for highly transite, high Re high CFL flows.
+        nLimiterIter    10; //  number of iterations to calculate the MULES limiter. 3-5 if CFL<3, 5-10 for CFD>3
+        // Use previous time corrector as initial estimate. yes for flowly varying flows, no for highly transite flows.
+        alphaApplyPrevCorr  no;
+
+        solver          smoothSolver;
+        smoother        symGaussSeidel;
+        tolerance       1e-10;
+        relTol          0;
+        minIter         1;
+        maxIter         50;
+    }
+
+    "alpha.*"  // multiphaseInterFoam
+    {
+        // nAlphaSubCycles 4;
+        // cAlpha          1;
+        cAlpha          1;
+        icAlpha         0;
+
+        MULESCorr       yes; // Switches on semi-implicit MULES
+        nAlphaSubCycles 1;   // 1 for semi-implicit MULES. >=2 for explicit MULES
+        nAlphaCorr      3;   // 2-3 for slow varying flows, >=3 for highly transite, high Re high CFL flows.
+        nLimiterIter    10; //  number of iterations to calculate the MULES limiter. 3-5 if CFL<3, 5-10 for CFD>3
+        // Use previous time corrector as initial estimate. yes for flowly varying flows, no for highly transite flows.
+        alphaApplyPrevCorr  no;
+
+        solver          smoothSolver;
+        smoother        symGaussSeidel;
+        tolerance       1e-10;
+        relTol          0;
+        minIter         1;
+        maxIter         50;
+    }
+
+    "pcorr.*"
+    {
+        solver          PCG;
+        preconditioner  DIC;
+        tolerance       1e-7;
+        relTol          0;
+
+        minIter 		0; // default 0
+        maxIter         300; // default 1000
+    }
+
+    p_rgh
+    {
+        $pcorr;
+        tolerance       1e-8;
+        relTol          0.01;
+    }
+
+    p_rghFinal
+    {
+        $p_rgh;
+        relTol          0;
+    }
+
+    "(U|k|omega|s.water|swater).*"
+    {
+        solver          smoothSolver;
+        smoother        symGaussSeidel;
+        tolerance       1e-06;
+        relTol          0;
+    }
+    R
+    {
+        solver          PBiCGStab;
+        preconditioner  DILU;
+        tolerance       1e-07;
+        relTol          0;
+    }
+    RFinal
+    {
+        solver          PBiCGStab;
+        preconditioner  DILU;
+        tolerance       1e-07;
+        relTol          0;
+    }
+
+}
+
+PIMPLE
+{
+
+    // default true. Recommanded: for highly convective flows
+    momentumPredictor           true;
+
+    // default false. if True, enable SIMPLEC; else, disable it.
+    consistent                  false;
+
+    // default 0. Recommanded: >=1 for non-orthogonal mesh.
+    // if non-orthogonal > 70, increase this corrector
+    nNonOrthogonalCorrectors    1;
+
+    // default 1. Recommanded: >=2 to enhance accuracy and stability.
+    nCorrectors                 2;
+
+    // default 1. 1:piso, >1: pimple. Recommand 2-5. 50 from PIMPLE wiki
+    nOuterCorrectors            1;
+
+    // for CFL much larger than 1 (2 for example), nCorrectors>=3, nOuterCorrectors>=2.
+    turbOnFinalIterOnly         true;    // default true.
+}
+
+relaxationFactors
+{
+    // equations
+    ".*"
+    {
+        ".*" 1;
+    }
+}
+
+cache
+{
+    grad(U);
+}
+// ************************************************************************* //

@@ -1,0 +1,139 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2206                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      fvSchemes;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+ddtSchemes
+{
+    /*
+    Euler-1st, bounded
+    backward-2rd, bounded/unbounded
+    CN-2rd, bounded/unbounded.
+    default         CrankNicolson phi;
+    phi:
+        0-Euler
+        1-Crank-Nicolson
+        0.7-0.9 is recmmmonded
+    */
+    default         Euler;
+    /*
+    8
+    (
+    CoEuler
+    CrankNicolson
+    Euler
+    SLTS
+    backward
+    bounded
+    localEuler
+    steadyState
+    )
+    */
+}
+
+gradSchemes
+{
+    /*
+    Gauss linear-cell based method
+    Gauss pointLimear-node based method, more accurate than cell based methods
+    leastSquares-more accurate
+    -----------------
+    limiters: increase stability, add diffusion
+        cellMDLimited, cellLimited, faceMDLimited, faceLimited
+    ----------------
+    phi:
+        0-turning off gradient limiter, gain accuraty, may be unbounded
+        1-gain stability, give up accuracy
+        0.5-best choice.
+    */
+    default    cellLimited Gauss linear 1.0;
+    /*
+    11-limiters
+    (
+    Gauss
+    cellLimited
+    cellLimited<Venkatakrishnan>
+    cellLimited<cubic>
+    cellMDLimited
+    edgeCellsLeastSquares
+    faceLimited
+    faceMDLimited
+    fourth
+    leastSquares
+    pointCellsLeastSquares
+    )
+    */
+}
+
+divSchemes
+{
+    default         none;
+    /*
+    upwind: 1st order
+    linearUpwind: 2nd order, bounded
+    linear: 2nd order, unbounded
+    TVD: vanLeer, Minmod et al... 2nd order, bounded
+    limitedLinear: 2nd order, unbounded, for LES
+    LUST: 75%linear + 25%linearUpwind
+    */
+    div(phi,alpha)    Gauss interfaceCompression vanLeer 1;
+    div(phirb,alpha) Gauss linear;
+    div(rhoPhi,k)      Gauss upwind;
+    div(rhoPhi,omega) Gauss upwind;
+
+    div(((rho*nuEff)*dev2(T(grad(U))))) Gauss linear;
+    // div(rhoPhi,U)  Gauss upwind;
+    div(rhoPhi,U)  Gauss linearUpwind grad(U);
+
+    div(phi,nuTilda) Gauss limitedLinear 1;
+
+    // div(alphaPhi.water,s.water)    Gauss upwind;
+    div(phi,s.water) Gauss upwind;
+    div(phi,swater) Gauss upwind;
+    div(phi,swaterA) Gauss upwind;
+    div(phi,swaterB) Gauss upwind;
+    div(phi,swaterC) Gauss upwind;
+    div(phi,swaterD) Gauss upwind;
+
+    div(phi,k)      Gauss linearUpwind limitedGrad;
+    div(phi,omega)  Gauss linearUpwind limitedGrad;
+
+    // Pearl YZ Li
+    div(((rho*nu)*dev2(T(grad(U))))) Gauss linear;
+    div(phi,R)      Gauss Minmod;
+   div(rho,R)   Gauss Minmod;
+   div(rhoPhi,R)   Gauss Minmod;
+   div((rho*R))  Gauss linear; //linear;
+}
+
+laplacianSchemes
+{
+    default         Gauss linear corrected;
+}
+
+interpolationSchemes
+{
+    default         linear;
+}
+
+snGradSchemes
+{
+    default         corrected;
+}
+
+wallDist
+{
+    method meshWave;
+}
+// ************************************************************************* //

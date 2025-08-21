@@ -1,0 +1,5 @@
+
+GrimshawNewWaveModel.C
+GrimshawWaveModel.C
+
+LIB = $(FOAM_USER_LIBBIN)/libSolitaryGrimshawABWaveModels
