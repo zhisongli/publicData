@@ -1,3 +1,0 @@
-waveGaugesNProbes.C
-
-EXE = $(WAVES_APPBIN)/waveGaugesNProbes

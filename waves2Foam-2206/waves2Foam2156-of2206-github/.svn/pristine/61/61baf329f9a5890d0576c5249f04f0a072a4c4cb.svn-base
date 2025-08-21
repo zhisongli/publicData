@@ -1,3 +1,0 @@
-sampleIncidentWaveField.C
-
-EXE = $(WAVES_APPBIN)/sampleIncidentWaveField

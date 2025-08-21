@@ -1,3 +1,0 @@
-setWaveField.C
-
-EXE = $(WAVES_APPBIN)/setWaveField

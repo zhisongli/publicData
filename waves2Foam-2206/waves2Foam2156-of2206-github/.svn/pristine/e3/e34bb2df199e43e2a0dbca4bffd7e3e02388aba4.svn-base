@@ -1,3 +1,0 @@
-surfaceElevation.C
-
-EXE = $(WAVES_APPBIN)/surfaceElevation

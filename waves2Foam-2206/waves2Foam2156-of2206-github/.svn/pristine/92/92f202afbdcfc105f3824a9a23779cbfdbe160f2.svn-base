@@ -1,3 +1,0 @@
-waveIsoFoam.C
-
-EXE = $(WAVES_APPBIN)/waveIsoFoam

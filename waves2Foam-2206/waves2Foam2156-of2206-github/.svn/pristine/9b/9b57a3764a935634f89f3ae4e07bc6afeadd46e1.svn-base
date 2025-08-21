@@ -1,5 +1,0 @@
-surfaceElevation/sampledSurfaceElevation.C
-overtopping/overtopping.C
-
-/* OUTPUT */
-LIB = $(WAVES_LIBBIN)/libwaves2FoamSampling
