@@ -1,0 +1,3 @@
+setWaveParameters.C
+
+EXE = $(WAVES_APPBIN)/setWaveParameters

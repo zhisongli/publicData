@@ -1,0 +1,3 @@
+postProcessWaves2Foam.C
+
+EXE = $(WAVES_APPBIN)/postProcessWaves2Foam

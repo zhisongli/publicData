@@ -1,0 +1,98 @@
+#!/bin/bash
+
+# Source tutorial run functions
+. $WM_PROJECT_DIR/bin/tools/RunFunctions
+
+exec="../../../bin/prepareCase.sh"
+
+if [ -x "$exec" ]
+then
+    . $exec
+else
+    echo "The file $WAVES_DIR/bin/prepareCase.sh is not executable."
+    echo "Make the file executable before continuing."
+    echo
+    echo "Exiting tutorial case."
+    exit 1
+fi
+
+# Make a clean polyMesh directory
+if [ ! -f log.blockMesh ]
+then
+    if [ -f "constant/polyMesh/boundary" ]
+    then
+        (cd constant/polyMesh; rm -rf *)
+    fi
+
+    cp blockMeshDict.org constant/polyMesh/blockMeshDict
+fi
+
+# Create the base blockmesh
+runApplication blockMesh
+
+# Make STL-surface / Use backed up STL-surface
+# The faceSetToSTL utility will come out on a later point
+arg=`which faceSetToSTL`
+
+if [ -n "$arg" ]
+then
+    runApplication faceSetToSTL
+else
+    cp constant/triSurface/geometria.stl_backup constant/triSurface/geometria.stl
+fi
+
+# Apply snappyHexMesh to create the submerged bar
+runApplication snappyHexMesh
+
+if [ -f log.snappyHexMesh ]
+then
+    # Clear the target polyMesh directory
+    (cd constant/polyMesh; rm -rf *);
+
+    # Find the time directories from snappyHexMesh
+    timeDir=`grep "Writing mesh to time" log.snappyHexMesh | awk '{print $5}'`
+    endTime=`echo $timeDir | tr ' ' '\n' | tail -1`
+    
+    # Go to the latest outputted time directory
+    cd $endTime/polyMesh
+    cp boundary* points* owner* faces* neighbour* ../../constant/polyMesh
+    cd ../..
+
+    # Clear the time directories created by snappyHexMesh
+    for i in $timeDir
+    do
+        rm -rf $i
+    done
+fi
+
+# Snappy does not have a consistent naming between 2.2.3. and 2.3.0, so this is
+# to take care of that issue.
+if [ "$WM_PROJECT_VERSION_NUMBER" -ge "230" -a $FOAMEXTENDPROJECT == 0 ]
+then
+    cd 0
+    listFields=`ls alpha* p* U`
+    for i in $listFields
+    do
+        sed -i 's/_patch0//' $i
+    done
+
+    cd ..
+fi
+
+# Prepare fields
+runApplication setWaveParameters
+runApplication setWaveField
+
+# Make the wave gauges
+if [ -d "waveGaugesNProbes" ]
+then
+    rm -rf waveGaugesNProbes
+fi
+runApplication waveGaugesNProbes
+
+# Correct the file waveGaugesNProbes/surfaceElevation_controlDict to yield
+# the desired outputting frequency.
+sed -i -e 's\//s\s\' -e 's/20;/1;/' waveGaugesNProbes/surfaceElevation_controlDict
+
+# Run tutorial
+runApplication waveFoam

@@ -1,0 +1,39 @@
+#!/bin/bash
+
+# Source tutorial run functions
+. $WM_PROJECT_DIR/bin/tools/RunFunctions
+
+exec="../../../bin/prepareCase.sh"
+
+if [ -x "$exec" ]
+then
+    . $exec
+else
+    echo "The file $WAVES_DIR/bin/prepareCase.sh is not executable."
+    echo "Make the file executable before continuing."
+    echo
+    echo "Exiting tutorial case."
+    exit 1
+fi
+
+# Set application name
+application="waveFoam"
+
+runApplication blockMesh
+runApplication setWaveParameters
+runApplication setWaveField
+runApplication $application
+
+if [ -n `grep "Run foamUpdateCyclics to convert" log.$application` ]
+then
+    echo "Updating cyclic boundaries"
+    foamUpgradeCyclics > log.foamUpgradeCyclics
+    rm -f log.setWaveField
+    runApplication setWaveField
+
+    rm -f log.$application
+    echo "Re-executing "$application
+    runApplication $application
+fi
+
+

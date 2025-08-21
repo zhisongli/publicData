@@ -1,0 +1,224 @@
+#!/bin/bash 
+
+## Making sure that prepareCase.sh is executable
+if [ ! -x "bin/prepareCase.sh" ]
+then
+    chmod a+x bin/prepareCase.sh
+fi
+
+## Make sure that bashrc is executable
+if [ ! -f "./bin/bashrc" ]
+then
+    cp ./bin/bashrc.org ./bin/bashrc
+    chmod a+x ./bin/bashrc
+fi
+
+## Set environmental variables
+. ./bin/bashrc
+
+## Check if WAVES_DIR exists
+if [ ! -d "$WAVES_DIR" ]
+then
+    echo ""
+    echo "FATAL ERROR."
+    echo "    The directory path "$WAVES_DIR "does not exist."
+    echo "    Correct the path in bin/bashrc"
+    echo ""
+    echo "    This means that you should correct the environmental variable \$WAVES_DIR"
+    echo "    such that it is pointed (in absolute sense) to the path, where waves2Foam"
+    echo "    is located."
+    echo ""
+    echo "    Please note that once bin/bashrc is created, bin/bashrc.org is only an"
+    echo "    inactive file. The latter is also the only of the two files, which is"
+    echo "    updated through the SVN-repository."
+    echo ""
+    echo "EXITING"
+    echo ""
+
+    exit
+fi
+
+# Hard-coded creation of the target for the compiled libraries, solvers and utilities
+# This is needed, because the Third-party installation does not use wmake, i.e. if
+# the directory does not exist, it means that all subsequent OpenFoam/waves2Foam
+# parts of the installation will fail!
+if [ ! -d "$WAVES_APPBIN" ]
+then
+    mkdir -p $WAVES_APPBIN
+fi
+
+if [ ! -d "$WAVES_LIBBIN" ]
+then
+    mkdir -p $WAVES_LIBBIN
+fi
+
+
+## COMPILE THIRD PARTY DEPENDENCIES
+(cd ThirdParty; ./Allwmake)
+
+if [[ $? -ne 0 ]]
+then
+    echo ""
+    echo "Problems with the compilation of the third party dependencies"
+    echo "Exiting"
+    echo ""
+    exit
+fi
+
+## LIBRARY
+echo "====================================="
+echo "    COMPILE LIBRARY"
+echo "====================================="
+( cd src; ./Allwmake )
+
+## SOLVERS
+# Find all solver names in $WAVES_SOL
+echo ""
+echo "====================================="
+echo "    COMPILE SOLVERS"
+echo "====================================="
+solvers=`ls -d $WAVES_SOL/*`
+
+# Loop over the solver names
+for s in $solvers
+do
+    solverName=`basename $s`
+
+    # Correct options file if extend branch or not
+    if [ "$EXTBRANCH" -eq "1" ]
+    then
+        if [ "$FOAMEXTENDPROJECT" -eq "0" ]
+        then
+            rm -f $WAVES_SOL/$solverName/Make/options
+            ln -s -f $WAVES_SOL/$solverName/Make/options.ext $WAVES_SOL/$apps/$solverName/Make/options
+        fi
+    else
+        if [ -f $WAVES_SOL/$solverName/Make/options.reg ]
+        then
+            rm -f $WAVES_SOL/$solverName/Make/options
+            ln -s -f $WAVES_SOL/$solverName/Make/options.reg $WAVES_SOL/$apps/$solverName/Make/options
+        fi
+    fi
+
+    # Compile the solver
+    ( cd $WAVES_SOL/$solverName; wmake )
+done
+
+## UTILITIES
+# Pre-processing utilities
+echo ""
+echo "====================================="
+echo "    COMPILE PRE-PROCESSING"
+echo "====================================="
+foamOpenFOAM="$WAVES_PRE/faceSetToSTL $WAVES_PRE/waveGaugesNProbes $WAVES_POST/postProcessWaves2Foam"
+
+for i in $foamOpenFOAM
+do
+    rm -f $i/Make/options
+
+    if [ "$FOAMEXTENDPROJECT" -eq "0" ]
+    then
+        if [ "$OFPLUSBRANCH" -eq "1" ]
+        then
+            if [ "$WM_PROJECT_VERSION_NUMBER" -lt 1706 ]
+            then
+                ln -s -f $i/Make/options.OpenFOAM $i/Make/options
+            else
+                ln -s -f $i/Make/options.OpenFOAMPlus1706 $i/Make/options
+            fi
+        else
+            ln -s -f $i/Make/options.OpenFOAM $i/Make/options
+        fi
+    else
+        if [ "$WM_PROJECT_VERSION_NUMBER" -lt 320 ]
+        then
+            ln -s -f $i/Make/options.foam $i/Make/options
+        else
+            ln -s -f $i/Make/options.foam.320 $i/Make/options
+        fi
+    fi
+done
+
+# Compile the setWaveField and account for the inclusion of lwaveModels (IHFoam) as of 2012-ESI
+if [ "$OFPLUSBRANCH" -eq "1" ]
+then
+    if [ "$WM_PROJECT_VERSION_NUMBER" -lt 1812 ]
+    then
+        ln -s -f $WAVES_PRE/setWaveField/Make/optionsNonGABC $WAVES_PRE/setWaveField/Make/options
+    elif [ "$WM_PROJECT_VERSION_NUMBER" -lt 2012 ]
+    then
+        ln -s -f $WAVES_PRE/setWaveField/Make/optionsPre2012 $WAVES_PRE/setWaveField/Make/options
+    else
+        ln -s -f $WAVES_PRE/setWaveField/Make/options2012 $WAVES_PRE/setWaveField/Make/options
+    fi
+else
+    ln -s -f $WAVES_PRE/setWaveField/Make/optionsNonGABC $WAVES_PRE/setWaveField/Make/options
+fi
+
+( cd $WAVES_PRE && wmake all )
+
+# Post-processing utilities - Post processing removed from compilation Jan. 2021
+# echo ""
+# echo "====================================="
+# echo "    COMPILE POST-PROCESSING"
+# echo "====================================="
+# rm -f $WAVES_POST/surfaceElevation/Make/options
+# 
+# if [ "$EXTBRANCH" -eq "1" ]
+# then
+#     ln -s -f $WAVES_POST/surfaceElevation/Make/options.210 $WAVES_POST/surfaceElevation/Make/options
+# elif [ "$OFPLUSBRANCH" -eq "1" ]
+# then
+#     ln -s -f $WAVES_POST/surfaceElevation/Make/options.220 $WAVES_POST/surfaceElevation/Make/options
+# elif [ "$WM_PROJECT_VERSION_NUMBER" -lt "220" ]
+# then
+#     ln -s -f $WAVES_POST/surfaceElevation/Make/options.210 $WAVES_POST/surfaceElevation/Make/options
+# else
+#     ln -s -f $WAVES_POST/surfaceElevation/Make/options.220 $WAVES_POST/surfaceElevation/Make/options
+# fi
+# 
+# Currently, only compile waves2FoamSampling for all Openfoam versions except
+# for OpenFOAM-4.0
+# if [ $FOAMEXTENDPROJECT -eq "0" ]
+# then
+#     if [ "$OFPLUSBRANCH" -eq "1" ]
+#     then
+#         if [ "$WM_PROJECT_VERSION_NUMBER" -lt "1612" ]
+#         then
+#             ( cd $WAVES_POST && wmake all)
+#         else
+#             ( cd $WAVES_POST/postProcessWaves2Foam; wmake)
+#         fi
+#     else
+#         if [ "$WM_PROJECT_VERSION_NUMBER" -lt "400" ]
+#         then
+#             ( cd $WAVES_POST && wmake all )
+#         else
+#             ( cd $WAVES_POST/postProcessWaves2Foam; wmake)
+#         fi
+#     fi
+# else
+#     ( cd $WAVES_POST && wmake all )
+# fi
+# 
+
+echo ""
+echo "====================================="
+echo "    COMPILE BREEDER"
+echo "====================================="
+
+if [ "$WM_PROJECT_VERSION_NUMBER" -eq "1606" ]
+then
+    ( cd $WAVES_POST/../breeder && wmake all )
+else
+    echo ""
+    echo "Nothing available for compilation in the breeder"
+    echo "directory."
+    echo ""
+fi
+
+echo ""
+echo "====================================="
+echo "    COMPILATION DONE"
+echo "====================================="
+echo ""

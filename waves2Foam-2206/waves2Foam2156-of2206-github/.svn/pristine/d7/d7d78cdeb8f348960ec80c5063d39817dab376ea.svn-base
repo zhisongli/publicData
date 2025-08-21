@@ -1,0 +1,83 @@
+#!/bin/bash
+
+if [ ! -f "./../bin/bashrc" ]
+then
+    cp ../bin/bashrc.org ../bin/bashrc
+    chmod a+x ./../bin/bashrc
+fi
+
+. ../bin/bashrc
+
+# Take care of the differences in the options, which arose between OF21 and OF22.
+rm -f $WAVES_SRC/Make/options
+dirList=`ls -d waves2Foam*`
+
+if [ $FOAMEXTENDPROJECT -eq "1" ]
+then
+    for i in $dirList
+    do
+        ln -s -f $WAVES_SRC/$i/Make/options.210 $WAVES_SRC/$i/Make/options
+    done
+elif [ $OFPLUSBRANCH -eq "1" ]
+then
+    for i in $dirList
+    do
+        ln -s -f $WAVES_SRC/$i/Make/options.220 $WAVES_SRC/$i/Make/options
+    done
+else
+    if [ "$WM_PROJECT_VERSION_NUMBER" -lt "220" ]
+    then
+        for i in $dirList
+        do
+            ln -s -f $WAVES_SRC/$i/Make/options.210 $WAVES_SRC/$i/Make/options
+        done
+    else
+        for i in $dirList
+        do
+            ln -s -f $WAVES_SRC/$i/Make/options.220 $WAVES_SRC/$i/Make/options
+        done
+    fi
+fi
+
+# Compile the library
+(cd waves2Foam          ; wmake libso)
+
+if [ $OFPLUSBRANCH -eq "1" ]
+then
+    if [ "$WM_PROJECT_VERSION_NUMBER" -gt "1806" ]
+    then
+        (cd waves2FoamGABC; wmake libso)
+    fi
+fi
+
+(cd waves2FoamProcessing; wmake libso)
+
+# Currently, only compile waves2FoamSampling for all Openfoam versions except
+# for OpenFOAM-4.0
+if [ $FOAMEXTENDPROJECT -eq "1" ]
+then
+    (cd waves2FoamSampling  ; wmake libso)
+elif [ $OFPLUSBRANCH -eq "1" ]
+then
+    if [ "$WM_PROJECT_VERSION_NUMBER" -lt "1706" ]
+    then
+        (cd waves2FoamSampling  ; wmake libso)
+    elif [ "$WM_PROJECT_VERSION_NUMBER" -lt "2206" ]
+    then
+        (cd waves2FoamSampling1712  ; wmake libso)
+    else
+        (cd waves2FoamSampling2206  ; wmake libso)
+    fi
+else
+    if [ "$WM_PROJECT_VERSION_NUMBER" -lt "400" ]
+    then
+        (cd waves2FoamSampling  ; wmake libso)
+    fi
+fi
+
+(cd waves2FoamPorosity  ; wmake libso)
+
+if [ "$WM_PROJECT_VERSION_NUMBER" -eq "1606" ]
+then
+    (cd waves2FoamMooring   ; wmake libso)
+fi
