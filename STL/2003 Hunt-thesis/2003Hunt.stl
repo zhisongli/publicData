@@ -1,0 +1,198 @@
+ solid PRO2STL version 1.0
+ facet normal 1 0 -0
+ outer loop 
+ vertex 15 -0.5 -0.5
+ vertex 15 0.5 -0.5
+ vertex 15 0.5 0.7499986284
+ endloop
+ endfacet
+ facet normal -0 0 -1
+ outer loop 
+ vertex 15 0.5 -0.5
+ vertex 15 -0.5 -0.5
+ vertex 3.828568699e-16 -0.5 -0.5
+ endloop
+ endfacet
+ facet normal -7.552361348e-16 1 0
+ outer loop 
+ vertex 9.11986279 0.5 0.4559923056
+ vertex 15 0.5 0.7499986284
+ vertex 15 0.5 -0.5
+ endloop
+ endfacet
+ facet normal -7.623531436e-16 1 -4.377544428e-17
+ outer loop 
+ vertex 15 0.5 -0.5
+ vertex -3.828568699e-16 0.5 -0.5
+ vertex 9.11986279 0.5 0.4559923056
+ endloop
+ endfacet
+ facet normal 0 0 -1
+ outer loop 
+ vertex 3.828568699e-16 -0.5 -0.5
+ vertex -3.828568699e-16 0.5 -0.5
+ vertex 15 0.5 -0.5
+ endloop
+ endfacet
+ facet normal 1 -0 0
+ outer loop 
+ vertex 15 0.5 0.7499986284
+ vertex 15 -0.5 0.7499986284
+ vertex 15 -0.5 -0.5
+ endloop
+ endfacet
+ facet normal 7.646765865e-16 -1 0
+ outer loop 
+ vertex 15 -0.5 -0.5
+ vertex 15 -0.5 0.7499986284
+ vertex 9.11986279 -0.5 0.4559923056
+ endloop
+ endfacet
+ facet normal 7.66053887e-16 -1 8.471528153e-18
+ outer loop 
+ vertex 9.11986279 -0.5 0.4559923056
+ vertex 3.828568699e-16 -0.5 -0.5
+ vertex 15 -0.5 -0.5
+ endloop
+ endfacet
+ facet normal -0.04993752584 0 0.9987523434
+ outer loop 
+ vertex 15 -0.5 0.7499986284
+ vertex 15 0.5 0.7499986284
+ vertex 9.11986279 0.5 0.4559923056
+ endloop
+ endfacet
+ facet normal -0.04993752584 0 0.9987523434
+ outer loop 
+ vertex 9.11986279 0.5 0.4559923056
+ vertex 9.11986279 -0.5 0.4559923056
+ vertex 15 -0.5 0.7499986284
+ endloop
+ endfacet
+ facet normal -1.032765604e-15 1 -4.64096903e-16
+ outer loop 
+ vertex 8.56486279 0.5 0.7341577053
+ vertex 8.77986279 0.5 0.7341577053
+ vertex 9.11986279 0.5 0.4559923056
+ endloop
+ endfacet
+ facet normal 5.163828022e-16 0 1
+ outer loop 
+ vertex 8.77986279 -0.5 0.7341577053
+ vertex 8.77986279 0.5 0.7341577053
+ vertex 8.56486279 0.5 0.7341577053
+ endloop
+ endfacet
+ facet normal -7.757271759e-16 1 4.875022997e-17
+ outer loop 
+ vertex 9.11986279 0.5 0.4559923056
+ vertex 8.11486279 0.5 0.4057423975
+ vertex 8.56486279 0.5 0.7341577053
+ endloop
+ endfacet
+ facet normal 5.163828022e-16 -0 1
+ outer loop 
+ vertex 8.56486279 0.5 0.7341577053
+ vertex 8.56486279 -0.5 0.7341577053
+ vertex 8.77986279 -0.5 0.7341577053
+ endloop
+ endfacet
+ facet normal -0.5895123246 0 0.8077593819
+ outer loop 
+ vertex 8.56486279 -0.5 0.7341577053
+ vertex 8.56486279 0.5 0.7341577053
+ vertex 8.11486279 0.5 0.4057423975
+ endloop
+ endfacet
+ facet normal 0.6332154021 0 0.7739756163
+ outer loop 
+ vertex 9.11986279 -0.5 0.4559923056
+ vertex 9.11986279 0.5 0.4559923056
+ vertex 8.77986279 0.5 0.7341577053
+ endloop
+ endfacet
+ facet normal 0.6332154021 -0 0.7739756163
+ outer loop 
+ vertex 8.77986279 0.5 0.7341577053
+ vertex 8.77986279 -0.5 0.7341577053
+ vertex 9.11986279 -0.5 0.4559923056
+ endloop
+ endfacet
+ facet normal -7.790787205e-16 1 1.157812448e-16
+ outer loop 
+ vertex 8.11486279 0.5 0.4057423975
+ vertex 9.11986279 0.5 0.4559923056
+ vertex -3.828568699e-16 0.5 -0.5
+ endloop
+ endfacet
+ facet normal 7.745742032e-16 -1 -5.105065933e-17
+ outer loop 
+ vertex 9.11986279 -0.5 0.4559923056
+ vertex 8.77986279 -0.5 0.7341577053
+ vertex 8.56486279 -0.5 0.7341577053
+ endloop
+ endfacet
+ facet normal 7.757271759e-16 -1 -4.875022997e-17
+ outer loop 
+ vertex 8.56486279 -0.5 0.7341577053
+ vertex 8.11486279 -0.5 0.4057423975
+ vertex 9.11986279 -0.5 0.4559923056
+ endloop
+ endfacet
+ facet normal -0.5895123246 0 0.8077593819
+ outer loop 
+ vertex 8.11486279 0.5 0.4057423975
+ vertex 8.11486279 -0.5 0.4057423975
+ vertex 8.56486279 -0.5 0.7341577053
+ endloop
+ endfacet
+ facet normal 7.790787205e-16 -1 -1.157812448e-16
+ outer loop 
+ vertex 3.828568699e-16 -0.5 -0.5
+ vertex 9.11986279 -0.5 0.4559923056
+ vertex 8.11486279 -0.5 0.4057423975
+ endloop
+ endfacet
+ facet normal -0.04993752584 0 0.9987523434
+ outer loop 
+ vertex 8.11486279 -0.5 0.4057423975
+ vertex 8.11486279 0.5 0.4057423975
+ vertex -3.828568699e-16 0.5 0
+ endloop
+ endfacet
+ facet normal 7.661557686e-16 -1 0
+ outer loop 
+ vertex 8.11486279 -0.5 0.4057423975
+ vertex 3.828568699e-16 -0.5 0
+ vertex 3.828568699e-16 -0.5 -0.5
+ endloop
+ endfacet
+ facet normal -0.04993752584 -3.823784967e-17 0.9987523434
+ outer loop 
+ vertex -3.828568699e-16 0.5 0
+ vertex 3.828568699e-16 -0.5 0
+ vertex 8.11486279 -0.5 0.4057423975
+ endloop
+ endfacet
+ facet normal -7.661557686e-16 1 0
+ outer loop 
+ vertex -3.828568699e-16 0.5 -0.5
+ vertex -3.828568699e-16 0.5 0
+ vertex 8.11486279 0.5 0.4057423975
+ endloop
+ endfacet
+ facet normal -1 -7.657137398e-16 0
+ outer loop 
+ vertex -3.828568699e-16 0.5 -0.5
+ vertex 3.828568699e-16 -0.5 -0.5
+ vertex 3.828568699e-16 -0.5 0
+ endloop
+ endfacet
+ facet normal -1 -7.657137398e-16 -0
+ outer loop 
+ vertex 3.828568699e-16 -0.5 0
+ vertex -3.828568699e-16 0.5 0
+ vertex -3.828568699e-16 0.5 -0.5
+ endloop
+ endfacet
+endsolid PRO2STL version 1.0
