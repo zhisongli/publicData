@@ -141,7 +141,7 @@ void Foam::waveMakerNeumannPointPatchVectorField::initialiseGeometry()
     }
 }
 
-#include "_funGammaEpsilon.C"
+// #include "_funGammaEpsilon.C"
 #include "_funKappa.C"
 #include "_funCelerity.C"
 #include "_funPeriod.C"
@@ -149,7 +149,7 @@ void Foam::waveMakerNeumannPointPatchVectorField::initialiseGeometry()
 #include "_funEta.C"
 #include "_funDXiDt.C"
 
-#include "_funCF2003.C"
+// #include "_funCF2003.C"
 
 
 
@@ -355,10 +355,10 @@ void Foam::waveMakerNeumannPointPatchVectorField::updateCoeffs()
 
         #include "srcBoussinesq.C"
 
-        #include "srcStrongly.C"
+        // #include "srcStrongly.C"
         #include "srcWeakly.C"
 
-        #include "srcCF2003.C"
+        // #include "srcCF2003.C"
         
         default:
         {

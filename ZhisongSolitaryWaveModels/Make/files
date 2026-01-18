@@ -1,5 +1,8 @@
 
-
+BoussinesqNew/BoussinesqNewWaveModel.C
+Clamond1999/Clamond1999WaveModel.C
+GrimshawNew/GrimshawNewWaveModel.C
+McCowanNew/McCowanNewWaveModel.C
 waveMakerNeumann/waveMakerNeumannPointPatchVectorField.C
 
-LIB = $(FOAM_USER_LIBBIN)/libZhisongSolitaryWaveModels
+LIB = libZhisongSolitaryWaveModels
