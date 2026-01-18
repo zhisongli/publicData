@@ -1,0 +1,33 @@
+{
+  "tasks": [
+    {
+      "type": "shell",
+      "label": "ofextension: build solver",
+      "command": [
+        "cd ${workspaceFolder};",
+        "source /opt/openfoam8/etc/bashrc WM_NCOMPROCS=2;",
+        "wmake 2>&1 | tee log.wmake_opt"
+      ],
+      "args": [],
+      "options": {},
+      "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "type": "shell",
+      "label": "ofextension: debug solver",
+      "command": [
+        "cd ${workspaceFolder};",
+        "source /opt/openfoam8/etc/bashrc WM_NCOMPROCS=2; export WM_COMPILE_OPTION=Debug;",
+        "wmake 2>&1 | tee log.wmake_debug"
+      ],
+      "args": [],
+      "options": {},
+      "problemMatcher": []
+    }
+  ],
+  "version": "2.0.0"
+}

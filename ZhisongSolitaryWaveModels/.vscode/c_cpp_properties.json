@@ -1,0 +1,23 @@
+{
+  "configurations": [
+    {
+      "name": "Linux",
+      "includePath": [
+        "/home/sunami/OpenFOAM/OpenFOAM-v2206/src/OSspecific/POSIX/lnInclude",
+        "/home/sunami/OpenFOAM/OpenFOAM-v2206/src/OpenFOAM/lnInclude",
+        "/home/sunami/OpenFOAM/OpenFOAM-v2206/src/finiteVolume/lnInclude",
+        "/home/sunami/OpenFOAM/OpenFOAM-v2206/src/fvOptions/lnInclude",
+        "/home/sunami/OpenFOAM/OpenFOAM-v2206/src/meshTools/lnInclude",
+        "/home/sunami/OpenFOAM/OpenFOAM-v2206/src/waveModels/lnInclude",
+        "lnInclude",
+        "./**"
+      ],
+      "defines": [],
+      "compilerPath": "/usr/bin/gcc",
+      "cStandard": "gnu11",
+      "cppStandard": "gnu++14",
+      "intelliSenseMode": "gcc-x64"
+    }
+  ],
+  "version": 4
+}
