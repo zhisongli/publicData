@@ -29,3 +29,7 @@ conda clean --all -y
 
 # 8. 清理 npm 缓存
 npm cache clean --force 2>/dev/null || true
+
+# remove libreOffice
+
+sudo apt remove --purge libreoffice* -y && sudo apt autoremove --purge -y
