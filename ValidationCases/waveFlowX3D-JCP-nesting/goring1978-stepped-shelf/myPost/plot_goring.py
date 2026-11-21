@@ -1,14 +1,20 @@
 #!/usr/bin/env python3
 """Goring (1978) stepped shelf: layout figure, gauge comparison figure and metrics.
 
-    python3 myPost/plot_goring.py RESULTS_DIR FIG_DIR
+    python3 myPost/plot_goring.py RESULTS_DIR FIG_DIR [ALIGN]
+
+ALIGN = per-gauge (default): Goring's piston is a moving (Neumann) boundary and
+the model prescribes the wave at a Dirichlet boundary, so the arrival times are not comparable; at every gauge the model
+time is shifted so that its first maximum (the largest crest of the first pass, absorbing run) falls on the measured one.
+The shifts are written to metrics_goring.json (per_gauge_shift_s) and quoted in the paper. ALIGN = g1 applies instead the
+single shift fixed at G1.
 
 RESULTS_DIR holds the run's OUTPUT/ (probe_eta_000N.txt, probe_stations.json) ; when it also holds
 OUTPUT_ABS/ (input.absorbing.txt, WAVE_ABSORPTION = SHALLOW) that variant is drawn and measured too, with the same shift.
 Experiment: experiment/gaugeNewN.csv, the original Engauge digitisation of Goring's gauge records (eta in cm, t in s;
 digitised with Engauge from the gauge figures of Goring (1978)).
-Time origin: the experimental records have their own origin; the model time is shifted by one constant, fixed by the
-crest of the incident wave at G1, and the same shift is applied to every gauge.
+Time origin: the experimental records have their own origin; the model time is first shifted by one constant, fixed by
+the crest of the incident wave at G1, and then (ALIGN = per-gauge) by a further offset per gauge, see above.
 Writes FIG_DIR/Goring1978A.pdf (layout), FIG_DIR/Goring1978B1.pdf (gauges) and RESULTS_DIR/metrics_goring.json.
 """
 import json
@@ -23,6 +29,7 @@ from figureStyle import funApplyStyle, figureLabel  # noqa: E402
 case = Path(__file__).resolve().parents[1]
 res = Path(sys.argv[1])
 figdir = Path(sys.argv[2])
+ALIGN = sys.argv[3] if len(sys.argv) > 3 else 'per-gauge'
 plt = funApplyStyle()
 h1, h2 = 0.25, 0.0946
 x_g = [-23 * h1, 0.0, 60 * h2, 120 * h2, 180 * h2]
@@ -95,16 +102,36 @@ if g2_side:
             metrics['g2_neighbours'][f'{folder}:station{st}:x={xs}'] = dict(
                 first_pass_max_m=float(e_[w].max()), t_max_s=float(t_[w][np.argmax(e_[w])] + shift))
 
+FIRST_PASS_END = {1: 8.0, 2: 9.0, 3: 20.0, 4: 24.0, 5: 24.0}
+
+
+def gauge_shift(n):
+    """Shift added to the model time at gauge n: the G1 shift, plus (per-gauge) the offset that puts the first-pass
+    maximum of the absorbing run (reflecting run if there is none) on the measured first-pass maximum."""
+    if ALIGN != 'per-gauge':
+        return shift
+    te, ee = exp_gauge(n)
+    t_, e_ = model_gauge(probe_of[n], 'OUTPUT_ABS' if has_abs else 'OUTPUT')
+    t_ = t_ + shift
+    tend = FIRST_PASS_END[n]
+    return shift + float(te[te <= tend][np.argmax(ee[te <= tend])] - t_[t_ <= tend][np.argmax(e_[t_ <= tend])])
+
+
+metrics['align'] = ALIGN
+metrics['per_gauge_shift_s'] = {names[n - 1]: gauge_shift(n) for n in range(1, 6)}
+metrics['per_gauge_offset_from_g1_shift_s'] = {k: v - shift for k, v in metrics['per_gauge_shift_s'].items()}
+
 fig, axes = plt.subplots(5, 1, figsize=(7.5, 9.0), sharex=True)
 for row, n in enumerate([5, 4, 3, 2, 1]):
     ax = axes[row]
     te, ee = exp_gauge(n)
     tm, em = model_gauge(probe_of[n])
-    tm = tm + shift
+    sh = gauge_shift(n)
+    tm = tm + sh
     ax.plot(te, ee, 'o', ms=2.2, color='k', label='Goring (1978)')
     if has_abs:
         ta, ea = model_gauge(probe_of[n], 'OUTPUT_ABS')
-        ta = ta + shift
+        ta = ta + sh
         ax.plot(ta, ea, '-', lw=1.0, color='tab:red', label='waveFlowX-3D, absorbing maker')
     ax.plot(tm, em, '--', lw=0.9, color='tab:blue', label='waveFlowX-3D, reflecting maker')
     ax.set_xlim(0, 60)
@@ -118,7 +145,7 @@ for row, n in enumerate([5, 4, 3, 2, 1]):
     if row == 0:
         ax.legend(loc='upper right', fontsize=9, ncol=3 if has_abs else 2)
     # first-pass window: before the end-wall reflection reaches the gauge
-    tend = {1: 8.0, 2: 9.0, 3: 20.0, 4: 24.0, 5: 24.0}[n]
+    tend = FIRST_PASS_END[n]
     me = max(ee[te <= tend])
     mm = max(em[tm <= tend])
     tme = te[te <= tend][np.argmax(ee[te <= tend])]
@@ -155,7 +182,7 @@ fig.savefig(figdir / 'Goring1978B1.png', dpi=150)
 
 # leading fission crests at G5 (first pass), compared with the Whitham estimate quoted in the paper
 tm, em = model_gauge(5)
-tm = tm + shift
+tm = tm + gauge_shift(5)
 te, ee = exp_gauge(5)
 metrics['G5_first_two_crests_model'] = first_crests(tm, em, 15.0, 24.0, 2)
 metrics['G5_first_two_crests_exp'] = first_crests(te, ee, 15.0, 24.0, 2)

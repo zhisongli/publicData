@@ -1,5 +1,8 @@
 {
   "time_shift_s": 18.034879677752098,
+  "align": "per-gauge",
+  "time_shift_x225_s": 17.25127723388361,
+  "offset_x225_from_x60_shift_s": -0.7836024438684888,
   "C": 3.314694556063952,
   "gamma": 0.21,
   "crest_x0_m": -50.0,
@@ -14,14 +17,14 @@
     "exp_max_m": 0.170149,
     "model_max_m": 0.188031758114654,
     "exp_t_max_s": 94.8717,
-    "model_t_max_s": 95.6553024438685,
+    "model_t_max_s": 94.8717,
     "rel_amp_diff": 0.10510057722733608
   },
   "x225_reflection": {
     "exp_max_m": 0.133773,
     "model_max_m": 0.14294851389406005,
     "exp_t_max_s": 116.7686,
-    "model_t_max_s": 118.1569799096012
+    "model_t_max_s": 117.37337746573272
   },
   "solver": "waveFlowX-3D 2.60.14"
 }

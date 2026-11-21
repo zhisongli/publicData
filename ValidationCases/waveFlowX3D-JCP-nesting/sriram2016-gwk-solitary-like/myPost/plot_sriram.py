@@ -1,7 +1,12 @@
 #!/usr/bin/env python3
 """Sriram et al. (2016) GWK test 2/3: setup figure, gauge comparison figure and metrics.
 
-    python3 myPost/plot_sriram.py RESULTS_DIR FIG_DIR
+    python3 myPost/plot_sriram.py RESULTS_DIR FIG_DIR [ALIGN]
+
+ALIGN = per-gauge (default): the experiment's wave came from a piston (moving,
+Neumann boundary) and the model starts from an idealised initial condition, so arrival times are not comparable; at each
+gauge the model time is shifted so that its first-pass maximum falls on the measured one, and the shift at x = 225 m is
+written to metrics_sriram.json (time_shift_x225_s). ALIGN = x60 applies instead the single shift fixed at x = 60 m.
 
 RESULTS_DIR holds the run's OUTPUT/ (probe_eta_0001.txt at x = 60 m, probe_eta_0002.txt at x = 225 m), INPUT/depthc.txt,
 INPUT/surfaceEta0.txt. Experiment: experiment/Fig04e.csv (x = 60 m) and Fig04f.csv (x = 225 m), digitised
@@ -21,6 +26,7 @@ from figureStyle import funApplyStyle, figureLabel  # noqa: E402
 case = Path(__file__).resolve().parents[1]
 res = Path(sys.argv[1])
 figdir = Path(sys.argv[2])
+ALIGN = sys.argv[3] if len(sys.argv) > 3 else 'per-gauge'
 plt = funApplyStyle()
 g, h0, H, gamma, xc = 9.81, 1.0, 0.12, 0.21, -50.0
 dx, xmin = 0.04, -150.0
@@ -50,7 +56,13 @@ tm60 = tm60 + shift
 tm225 = tm225 + shift
 m = tm225 <= 105.0                       # first pass, before the beach reflection
 me = te225 <= 105.0
-metrics = dict(time_shift_s=float(shift), C=float(C), gamma=gamma, crest_x0_m=xc)
+shift225 = 0.0
+if ALIGN == 'per-gauge':
+    shift225 = float(te225[me][np.argmax(ee225[me])] - tm225[m][np.argmax(em225[m])])
+    tm225 = tm225 + shift225
+    m = tm225 <= 105.0 + shift225
+metrics = dict(time_shift_s=float(shift), align=ALIGN, time_shift_x225_s=float(shift + shift225),
+               offset_x225_from_x60_shift_s=shift225, C=float(C), gamma=gamma, crest_x0_m=xc)
 for lab, (te, ee, tm, em, mm, mme) in dict(
         x60=(te60, ee60, tm60, em60, np.ones_like(tm60, bool), np.ones_like(te60, bool)),
         x225_first_pass=(te225, ee225, tm225, em225, m, me)).items():
@@ -58,7 +70,7 @@ for lab, (te, ee, tm, em, mm, mme) in dict(
                         exp_t_max_s=float(te[mme][np.argmax(ee[mme])]), model_t_max_s=float(tm[mm][np.argmax(em[mm])]),
                         rel_amp_diff=float((em[mm].max() - ee[mme].max()) / ee[mme].max()))
 # reflected wave at x = 225 m (after 105 s)
-r, re_ = tm225 > 105.0, te225 > 105.0
+r, re_ = tm225 > 105.0 + shift225, te225 > 105.0
 if r.any() and re_.any():
     metrics['x225_reflection'] = dict(exp_max_m=float(ee225[re_].max()), model_max_m=float(em225[r].max()),
                                       exp_t_max_s=float(te225[re_][np.argmax(ee225[re_])]),
@@ -74,7 +86,7 @@ def ref(t, tc, gam):
 fig, axes = plt.subplots(1, 2, figsize=(11, 3.4))
 for ax, lab, te, ee, tm, em, xl in [(axes[0], figureLabel[2], te60, ee60, tm60, em60, (30, 80)),
                                      (axes[1], figureLabel[3], te225, ee225, tm225, em225, (80, 120))]:
-    tc = tm[np.argmax(em * (tm < 105))]
+    tc = tm[np.argmax(em * (tm < 105 + shift225))]
     tt = np.linspace(*xl, 2000)
     ax.plot(te, 100 * ee, 'o', ms=4, color='tab:red', alpha=0.85, label='Sriram et al. (2016)')
     ax.plot(tm, 100 * em, 'k-', lw=1.5, label='waveFlowX-3D')

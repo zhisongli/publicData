@@ -60,5 +60,8 @@ Please cite the original experiments when using the digitised records:
 
 The records were digitised from the figures of these publications with Engauge Digitizer and are given as digitised,
 without resampling. The digitised points carry the thickness of the plotted line, so several values may share one time.
-The experimental time origin is not known relative to the model's; each comparison shifts the model time by one
-constant fixed by one crest (stated in the case README) and applies it to every gauge.
+Both experiments generated the wave with a piston, a moving boundary that the model replaces by a wave prescribed at a
+fixed boundary (Goring) or by an idealised initial pulse (Sriram), and the experimental time origin is not known relative
+to the model's. The model record is therefore shifted in time at each gauge so that its first maximum falls on the
+measured one; the shifts are written to `model/metrics_*.json` and given in the case READMEs. The plotting scripts take
+an optional third argument (`g1` or `x60`) that applies one shift, fixed at the first gauge, to every gauge instead.

@@ -29,16 +29,21 @@ figures of Goring (1978).
 
 ## Comparison (`myPost/plot_goring.py RESULTS_DIR FIG_DIR`)
 
-The model time is shifted by -3.84 s, fixed by the crest of the incident wave at G1, and the same shift is applied at
-every gauge. First crest, absorbing run (`model/metrics_goring.json`):
+At each gauge the model time is shifted so that its first maximum (absorbing run) falls on the measured one
+(`model/metrics_goring.json`, `per_gauge_shift_s`). The shift at G1 is -3.84 s; relative to it, the other gauges need
++0.09 s (G2) and -0.17, -0.24, -0.13 s (G3, G4, G5), so with a single shift the leading crest on the shelf would arrive
+up to 0.24 s late. First crest, absorbing run:
 
 | Gauge | Experiment | Model | Difference |
 |---|---|---|---|
 | G1 | 24.9 mm | 25.0 mm | +0.4 % |
 | G2, model at x = -0.05 / +0.05 m | 28.0 mm | 31.5 / 28.1 mm | the measurement lies between |
-| G3 | 34.3 mm | 37.3 mm | +9 %, 0.17 s late |
-| G4 | 37.6 mm | 41.6 mm | +11 %, 0.24 s late |
-| G5 | 33.9 mm | 41.6 mm | +23 %, 0.13 s late |
+| G3 | 34.3 mm | 37.3 mm | +9 % |
+| G4 | 37.6 mm | 41.6 mm | +11 % |
+| G5 | 33.9 mm | 41.6 mm | +23 % |
+
+With these shifts the leading crest of the wave reflected from the end wall arrives 0.17 and 0.20 s early at G3 and G4
+and 0.02 s late at G5.
 
 The G2 probe at x = 0 lands in the first shelf cell, which lies in a dip of the free surface at the step corner about
 four cells wide; the paper therefore uses the probe at x = -0.05 m (the cell centred 0.045 m offshore of the step).
