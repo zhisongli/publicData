@@ -1,0 +1,39 @@
+{
+  "format": "waveflowx-probe",
+  "version": 4,
+  "encoding": "text",
+  "stations_file": "./stations.txt",
+  "plot_intv_stat": 1.0000000000000000E-002,
+  "sample_steps": 0,
+  "p_center": "mean",
+  "p_center_fallback": "mean of the two bounding faces on Layers with kglob < 3",
+  "segment": 0,
+  "start_time": 0.0000000000000000E+000,
+  "time_axis": "shared; rows are written when every Layer is synchronized with the root Layer; with sample_steps = N > 0 a row is every root step whose RUN_STEP is a multiple of N; with plot_intv_stat > 0 a row is the first root step end at or after each target time; the initial and final states are always rows",
+  "flow_columns": "t; then for k = 1..kglob (cell centres, bed to surface) the flow_centre_variables; then for k = 1..kglob+1 (sigma faces, bed to surface) the flow_face_variables",
+  "flow_centre_variables": ["z"],
+  "flow_face_variables": [],
+  "units": {"t": "s", "eta": "m", "D": "m", "mask": "1", "zeta_theory": "m", "z": "m", "u": "m/s", "v": "m/s", "w": "m/s", "rho": "kg/m3", "p": "Pa", "salinity": "", "temperature": "", "z_face": "m", "p_face": "Pa", "omega_face": "m/s"},
+  "definitions": {"z": "cell-centre elevation relative to still water, -Hc+sigc*D", "z_face": "sigma-face elevation relative to still water, -Hc+sig*D", "D": "total water depth Hc+eta", "mask": "1 wet, 0 dry", "rho": "full water density", "p": "non-hydrostatic pressure at the cell centre, mean of the two bounding faces 0.5*(p_face_k+p_face_k+1) (p_center = mean)", "p_face": "non-hydrostatic pressure on sigma faces as reported: the stage pressure, or with PRESSURE_OUTPUT = STEP_END and ORDER 2 or 3 the extrapolated step-end pressure (ORDER 0 keeps the stage pressure), filtered when PRESSURE_OUTPUT_FILTER = SMOOTH121 (see pressure_output of each layer; surface face = 0)", "omega_face": "volume flux through sigma faces, D*dsigma/dt", "zeta_theory": "analytical internal-wave interface displacement from INTERNAL_WAVE_* at the cell centre"},
+  "layers": [
+    {"id": 1, "depth": 1, "Mglob": 3287, "Nglob": 1, "Kglob": 5, "dx": 1.0000000000000000E-002, "dy": 1.0000000000000000E-002, "xmin": -1.3000000000000000E+001, "ymin": -5.0000000000000001E-003, "result_folder": "./OUTPUT/",
+     "pressure_output": {"mode": "STAGE", "order": 2, "schedule": "STEP", "filter": "NONE"},
+     "internal_wave": null}
+  ],
+  "stations": [
+    {"id": 1, "x": -5.7500000000000000E+000, "y": 0.0000000000000000E+000, "layer": 1, "i": 726, "j": 1, "x_cell": -5.7450000000000001E+000, "y_cell": 0.0000000000000000E+000, "kglob": 5, "owner_rank": 0,
+     "eta_file": "probe_eta_0001.txt", "flow_file": "probe_flow_0001.txt", "eta_columns": ["t", "eta", "D", "mask"]},
+    {"id": 2, "x": 0.0000000000000000E+000, "y": 0.0000000000000000E+000, "layer": 1, "i": 1301, "j": 1, "x_cell": 5.0000000000007816E-003, "y_cell": 0.0000000000000000E+000, "kglob": 5, "owner_rank": 1,
+     "eta_file": "probe_eta_0002.txt", "flow_file": "probe_flow_0002.txt", "eta_columns": ["t", "eta", "D", "mask"]},
+    {"id": 3, "x": 5.6760000000000002E+000, "y": 0.0000000000000000E+000, "layer": 1, "i": 1868, "j": 1, "x_cell": 5.6750000000000007E+000, "y_cell": 0.0000000000000000E+000, "kglob": 5, "owner_rank": 2,
+     "eta_file": "probe_eta_0003.txt", "flow_file": "probe_flow_0003.txt", "eta_columns": ["t", "eta", "D", "mask"]},
+    {"id": 4, "x": 1.1352000000000000E+001, "y": 0.0000000000000000E+000, "layer": 1, "i": 2436, "j": 1, "x_cell": 1.1355000000000000E+001, "y_cell": 0.0000000000000000E+000, "kglob": 5, "owner_rank": 2,
+     "eta_file": "probe_eta_0004.txt", "flow_file": "probe_flow_0004.txt", "eta_columns": ["t", "eta", "D", "mask"]},
+    {"id": 5, "x": 1.7027999999999999E+001, "y": 0.0000000000000000E+000, "layer": 1, "i": 3003, "j": 1, "x_cell": 1.7025000000000002E+001, "y_cell": 0.0000000000000000E+000, "kglob": 5, "owner_rank": 3,
+     "eta_file": "probe_eta_0005.txt", "flow_file": "probe_flow_0005.txt", "eta_columns": ["t", "eta", "D", "mask"]},
+    {"id": 6, "x": -5.0000000000000003E-002, "y": 0.0000000000000000E+000, "layer": 1, "i": 1296, "j": 1, "x_cell": -4.4999999999999929E-002, "y_cell": 0.0000000000000000E+000, "kglob": 5, "owner_rank": 1,
+     "eta_file": "probe_eta_0006.txt", "flow_file": "probe_flow_0006.txt", "eta_columns": ["t", "eta", "D", "mask"]},
+    {"id": 7, "x": 5.0000000000000003E-002, "y": 0.0000000000000000E+000, "layer": 1, "i": 1306, "j": 1, "x_cell": 5.4999999999999716E-002, "y_cell": 0.0000000000000000E+000, "kglob": 5, "owner_rank": 1,
+     "eta_file": "probe_eta_0007.txt", "flow_file": "probe_flow_0007.txt", "eta_columns": ["t", "eta", "D", "mask"]}
+  ]
+}

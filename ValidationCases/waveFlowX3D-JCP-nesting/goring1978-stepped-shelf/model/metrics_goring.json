@@ -1,0 +1,273 @@
+{
+  "time_shift_s": -3.836592043537876,
+  "gauges": {
+    "G5": {
+      "x": 17.028000000000002,
+      "first_pass_end_s": 24.0,
+      "exp_max_m": 0.0338849,
+      "model_max_m": 0.0416318730033184,
+      "exp_t_max_s": 20.4312,
+      "model_t_max_s": 20.56360040826484,
+      "rel_amp_diff": 0.2286261137945928,
+      "phase_diff_s": 0.13240040826483934
+    },
+    "G4": {
+      "x": 11.352,
+      "first_pass_end_s": 24.0,
+      "exp_max_m": 0.0375935,
+      "model_max_m": 0.04162347647851207,
+      "exp_t_max_s": 15.3981,
+      "model_t_max_s": 15.634664686674803,
+      "rel_amp_diff": 0.10719875719238878,
+      "phase_diff_s": 0.23656468667480368
+    },
+    "G3": {
+      "x": 5.676,
+      "first_pass_end_s": 20.0,
+      "exp_max_m": 0.0343194,
+      "model_max_m": 0.0373483198441379,
+      "exp_t_max_s": 10.5304,
+      "model_t_max_s": 10.70468205661529,
+      "rel_amp_diff": 0.088256783164563,
+      "phase_diff_s": 0.17428205661529006
+    },
+    "G2": {
+      "x": 0.0,
+      "first_pass_end_s": 9.0,
+      "exp_max_m": 0.0280349,
+      "model_max_m": 0.031478976982140416,
+      "exp_t_max_s": 6.09085,
+      "model_t_max_s": 6.003763634053096,
+      "rel_amp_diff": 0.12284962607822446,
+      "phase_diff_s": -0.08708636594690322
+    },
+    "G1": {
+      "x": -5.75,
+      "first_pass_end_s": 8.0,
+      "exp_max_m": 0.0248819,
+      "model_max_m": 0.024992418208614087,
+      "exp_t_max_s": 2.5042,
+      "model_t_max_s": 2.5042,
+      "rel_amp_diff": 0.0044417109872673805,
+      "phase_diff_s": 0.0
+    }
+  },
+  "gauges_absorbing": {
+    "G5": {
+      "model_max_m": 0.041675502615016805,
+      "model_t_max_s": 20.564012308771993,
+      "rel_amp_diff": 0.22991369651428223,
+      "phase_diff_s": 0.13281230877199235,
+      "max_abs_diff_to_reflecting_first_pass_m": 0.00032001901867250576
+    },
+    "G4": {
+      "model_max_m": 0.041675546150687484,
+      "model_t_max_s": 15.634487413396801,
+      "rel_amp_diff": 0.1085838283396726,
+      "phase_diff_s": 0.2363874133968018,
+      "max_abs_diff_to_reflecting_first_pass_m": 0.0001542823504949789
+    },
+    "G3": {
+      "model_max_m": 0.037401971696431904,
+      "model_t_max_s": 10.70422826740987,
+      "rel_amp_diff": 0.08982009290465173,
+      "phase_diff_s": 0.17382826740987056,
+      "max_abs_diff_to_reflecting_first_pass_m": 6.441082041840768e-05
+    },
+    "G2": {
+      "model_max_m": 0.03151742652756029,
+      "model_t_max_s": 6.004063273217647,
+      "rel_amp_diff": 0.1242211146663725,
+      "phase_diff_s": -0.08678672678235255,
+      "max_abs_diff_to_reflecting_first_pass_m": 7.414442547193367e-05
+    },
+    "G1": {
+      "model_max_m": 0.02502619389078664,
+      "model_t_max_s": 2.5036318914162923,
+      "rel_amp_diff": 0.005799150819939095,
+      "phase_diff_s": -0.0005681085837077049,
+      "max_abs_diff_to_reflecting_first_pass_m": 5.7527867406426125e-05
+    }
+  },
+  "late_rms_m": {
+    "G5": {
+      "window_s": [
+        24.0,
+        60.9849
+      ],
+      "reflecting": [
+        0.007562522790502724,
+        189
+      ],
+      "absorbing": [
+        0.0074582231148694385,
+        189
+      ]
+    },
+    "G4": {
+      "window_s": [
+        24.0,
+        60.7803
+      ],
+      "reflecting": [
+        0.005061909984245266,
+        224
+      ],
+      "absorbing": [
+        0.004688636028337921,
+        224
+      ]
+    },
+    "G3": {
+      "window_s": [
+        20.0,
+        60.5852
+      ],
+      "reflecting": [
+        0.005006585944323581,
+        234
+      ],
+      "absorbing": [
+        0.005545043611765223,
+        234
+      ]
+    },
+    "G2": {
+      "window_s": [
+        9.0,
+        60.4854
+      ],
+      "reflecting": [
+        0.0056049457102060815,
+        193
+      ],
+      "absorbing": [
+        0.004466951776363638,
+        193
+      ]
+    },
+    "G1": {
+      "window_s": [
+        8.0,
+        60.9836
+      ],
+      "reflecting": [
+        0.005561222889003134,
+        215
+      ],
+      "absorbing": [
+        0.004665104291553205,
+        215
+      ]
+    }
+  },
+  "g2_model_probe_x_m": -0.05,
+  "g2_neighbours": {
+    "OUTPUT:station2:x=0.0": {
+      "first_pass_max_m": 0.017169624890655336,
+      "t_max_s": 5.954286196534059
+    },
+    "OUTPUT_ABS:station2:x=0.0": {
+      "first_pass_max_m": 0.017192830524195332,
+      "t_max_s": 5.9545928858406425
+    },
+    "OUTPUT:station6:x=-0.05": {
+      "first_pass_max_m": 0.031478976982140416,
+      "t_max_s": 6.003763634053096
+    },
+    "OUTPUT_ABS:station6:x=-0.05": {
+      "first_pass_max_m": 0.03151742652756029,
+      "t_max_s": 6.004063273217647
+    },
+    "OUTPUT:station7:x=0.05": {
+      "first_pass_max_m": 0.028110392340232382,
+      "t_max_s": 6.063553964888503
+    },
+    "OUTPUT_ABS:station7:x=0.05": {
+      "first_pass_max_m": 0.028147064956902043,
+      "t_max_s": 6.063842885531053
+    }
+  },
+  "rereflection_window": {
+    "G5": {
+      "window_s": [
+        38.0,
+        47.0
+      ],
+      "exp_points": 17,
+      "exp_max_abs_m": 0.0010364600000000001,
+      "exp_largest_gap_s": 1.245900000000006,
+      "reflecting_max_m": 0.009283233096564453,
+      "absorbing_max_m": 6.134967994929352e-05
+    },
+    "G4": {
+      "window_s": [
+        49.0,
+        53.0
+      ],
+      "exp_points": 13,
+      "exp_max_abs_m": 0.0021704000000000003,
+      "exp_largest_gap_s": 0.6877999999999957,
+      "reflecting_max_m": 0.011241084116840744,
+      "absorbing_max_m": 1.1108247165755869e-05
+    },
+    "G3": {
+      "window_s": [
+        26.0,
+        31.0
+      ],
+      "exp_points": 1,
+      "exp_max_abs_m": 0.00205035,
+      "exp_largest_gap_s": 3.706900000000001,
+      "reflecting_max_m": 0.00732588439338884,
+      "absorbing_max_m": 5.859744803869693e-05
+    },
+    "G2": {
+      "window_s": [
+        20.0,
+        26.0
+      ],
+      "exp_points": 10,
+      "exp_max_abs_m": 0.000707496,
+      "exp_largest_gap_s": 1.2342000000000013,
+      "reflecting_max_m": 0.008318248984892862,
+      "absorbing_max_m": 5.5359947446653734e-05
+    },
+    "G1": {
+      "window_s": [
+        16.0,
+        22.0
+      ],
+      "exp_points": 15,
+      "exp_max_abs_m": 0.000314961,
+      "exp_largest_gap_s": 1.311799999999998,
+      "reflecting_max_m": 0.00670611051798109,
+      "absorbing_max_m": 7.405090613460397e-05
+    }
+  },
+  "G5_first_two_crests_model": [
+    [
+      20.56360040826484,
+      0.0416318730033184
+    ],
+    [
+      22.044195281653458,
+      0.02009403362970845
+    ]
+  ],
+  "G5_first_two_crests_exp": [
+    [
+      20.4312,
+      0.0338849
+    ],
+    [
+      21.8207,
+      0.0187684
+    ]
+  ],
+  "whitham_estimate_m": [
+    0.0443,
+    0.0201
+  ],
+  "solver": "waveFlowX-3D 2.60.14"
+}
