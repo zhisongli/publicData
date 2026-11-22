@@ -1,6 +1,6 @@
-# waveFlowX-3D validation cases: surface solitary waves over a step and over a long flat bed
+# waveFlowX-3D validation cases of the JCP nesting paper
 
-These are the single-grid validation cases of Section 3 of
+These are the single-grid validation cases of Section 3 and the nested cases of Sections 5.6, 5.8 and 5.9 of
 
 > Z. Li, W. Zhu, J. Zhang, *A stage-consistent MPI framework for one- and two-way local static nesting in a
 > non-hydrostatic free-surface wave model*, submitted to the Journal of Computational Physics.
@@ -10,8 +10,9 @@ These are the single-grid validation cases of Section 3 of
 | `goring1978-stepped-shelf/` | Fission of a solitary wave over a stepped shelf (Goring 1978) | Section 3.1, Figs. 4-5 |
 | `sriram2016-gwk-solitary-like/` | Solitary-like tsunami wave over 250 m of flat bed in the GWK flume (Sriram et al. 2016) | Section 3.2, Figs. 1 and 6 |
 | `nhwave-setup-comparison/` | Both cases on the setups of the NHWAVE computations of Zhuang et al. (2026), changed one factor at a time | Section 3.1 (code-to-code paragraph), Section 3.2 (initial velocity and grid); run S3r is Fig. 6 |
+| `nested-cases/` | Nested runs: an oblique packet crossing a 2-D child, the stepped shelf with a nested shelf, the elliptic shoal of Berkhoff et al. (1982) | Sections 5.6, 5.8, 5.9 (its own README) |
 
-Each of the first two case folders holds (the third has its own layout, described in its README):
+Each of the first two case folders holds (the other two have their own layouts, described in their READMEs):
 
 - `input.txt` (and variants), `stations.txt` and, for the Goring case, `INPUT/`: the solver input as run (the Sriram
   case's `INPUT/` files are written by `make_input.py`; the bathymetry and initial elevation are also in `model/INPUT/`);

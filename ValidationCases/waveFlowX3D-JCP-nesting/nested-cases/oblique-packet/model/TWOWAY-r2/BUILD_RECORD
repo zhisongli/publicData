@@ -1,0 +1,4 @@
+5b893d9 (src identical to tag v2.60.14 = 50ad187), release build in waveflowx-auto-nest-20261120/src-fix3
+sha256 47e627826080db6b0be30d7f2edd62032fe20ee9573543110a7eb3f9a16db876
+host j11r2n09 job 49545578 ranks 32 files input.txt start 2026-11-22 09:38:25
+rc=0 seconds=632 normal=1 end 2026-11-22 09:48:57
