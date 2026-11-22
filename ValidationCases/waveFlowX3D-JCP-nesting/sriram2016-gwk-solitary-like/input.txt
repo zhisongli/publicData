@@ -1,28 +1,28 @@
 ! User-selected experimental comparison; no fitted parameters.
-TITLE = sriram2016_gwk_solitary_like
+TITLE = apor_sriram_S3r
 RESULT_FOLDER = ./OUTPUT/
-Mglob = 10500
+Mglob = 7875
 Nglob = 1
 Kglob = 10
 DX = 0.04
 DY = 0.04
-XMIN = -150.0
+XMIN = -100.0
 YMIN = -0.02
 IVGRD = 1
 GRD_R = 1.1
-PX = 42
+PX = 63
 PY = 1
 DT_INI = 0.001
 DT_MIN = 1e-9
 DT_MAX = 0.02
 CFL = 0.25
 SIM_STEPS = 100000000
-TOTAL_TIME = 110
+TOTAL_TIME = 100
 PLOT_START = 0
 PLOT_INTV = 10
 SCREEN_INTV = 1
 FROUDE_CAP = 10.0
-MinDep = 0.001
+MinDep = 0.005
 BATHYMETRY_TYPE = FILE
 INITIAL_EUVW = T
 HOTSTART = F
@@ -86,7 +86,7 @@ OUT_INTERNAL_WAVE_ZETA = F
 OUT_INTERNAL_WAVE_SOURCE = F
 WAVE_STATISTICS_ON = F
 PRECONDITIONER = PFMG
-! ---- added for sriram2016-gwk-solitary-like-20261121 (scripts/make_input.py) ----
+! ---- added by scripts/make_inputs.py (S3) ----
 ACCURACY_LEVEL = 1
 PRESSURE_PROJECTION = LEGACY
 PRESSURE_BED = LEGACY

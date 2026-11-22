@@ -1,6 +1,6 @@
 # waveFlowX-3D validation cases: surface solitary waves over a step and over a long flat bed
 
-These are the two single-grid validation cases of Section 3 of
+These are the single-grid validation cases of Section 3 of
 
 > Z. Li, W. Zhu, J. Zhang, *A stage-consistent MPI framework for one- and two-way local static nesting in a
 > non-hydrostatic free-surface wave model*, submitted to the Journal of Computational Physics.
@@ -9,8 +9,9 @@ These are the two single-grid validation cases of Section 3 of
 |---|---|---|
 | `goring1978-stepped-shelf/` | Fission of a solitary wave over a stepped shelf (Goring 1978) | Section 3.1, Figs. 4-5 |
 | `sriram2016-gwk-solitary-like/` | Solitary-like tsunami wave over 250 m of flat bed in the GWK flume (Sriram et al. 2016) | Section 3.2, Figs. 1 and 6 |
+| `nhwave-setup-comparison/` | Both cases on the setups of the NHWAVE computations of Zhuang et al. (2026), changed one factor at a time | Section 3.1 (code-to-code paragraph), Section 3.2 (initial velocity and grid); run S3r is Fig. 6 |
 
-Each case folder holds:
+Each of the first two case folders holds (the third has its own layout, described in its README):
 
 - `input.txt` (and variants), `stations.txt` and, for the Goring case, `INPUT/`: the solver input as run (the Sriram
   case's `INPUT/` files are written by `make_input.py`; the bathymetry and initial elevation are also in `model/INPUT/`);
@@ -28,7 +29,8 @@ Requires Python 3 with NumPy, SciPy and Matplotlib (LaTeX text rendering is used
 
 ```bash
 cd goring1978-stepped-shelf && python3 myPost/plot_goring.py model figs
-cd sriram2016-gwk-solitary-like && python3 myPost/plot_sriram.py model figs && python3 myPost/sketch_z2sigma.py figs
+cd sriram2016-gwk-solitary-like && python3 myPost/plot_sriram.py model figs per-gauge 55 && python3 myPost/sketch_z2sigma.py figs
+cd nhwave-setup-comparison && python3 myPost/compare.py model results
 ```
 
 The scripts rewrite `model/metrics_*.json`; with the shipped records the result is identical to the file in this folder.
@@ -39,15 +41,14 @@ The runs used waveFlowX-3D 2.60.14. The solver source is not public at
 present; it is available from the corresponding author on reasonable request. With a build of the solver:
 
 ```bash
-python3 scripts/make_input.py          # Sriram case: python3 scripts/make_input.py --px 42
+python3 scripts/make_input.py          # Sriram case: python3 scripts/make_input.py --px 63
 mpirun -np <PX*PY> waveflowx input.txt
-python3 myPost/plot_goring.py . figs   # or plot_sriram.py
+python3 myPost/plot_goring.py . figs   # or: python3 myPost/plot_sriram.py . figs per-gauge 55
 ```
 
 `make_input.py` writes the inputs of this folder byte for byte (checked on macOS with NumPy; for the Sriram case the
 large initial-velocity files `INPUT/surfaceU0.txt`, `surfaceV0.txt`, `surfaceW0.txt` are not shipped and are generated
-the same way: U0 and V0 are identical to those of the run, and 7 of the 105 000 values of W0 differ from the run's in the
-last printed digit, by at most 1e-13 m/s).
+the same way, identical to those of the run).
 
 ## Experimental data and their sources
 

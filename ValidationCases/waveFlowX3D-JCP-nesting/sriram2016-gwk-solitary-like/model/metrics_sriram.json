@@ -1,30 +1,31 @@
 {
-  "time_shift_s": 18.034879677752098,
+  "time_shift_s": 33.175868827333964,
   "align": "per-gauge",
-  "time_shift_x225_s": 17.25127723388361,
-  "offset_x225_from_x60_shift_s": -0.7836024438684888,
+  "time_shift_x225_s": 33.291413051781284,
+  "offset_x225_from_x60_shift_s": 0.11554422444731927,
   "C": 3.314694556063952,
   "gamma": 0.21,
-  "crest_x0_m": -50.0,
+  "crest_x0_m": 5.300000000000004,
+  "x_offset_m": 55.0,
   "x60": {
     "exp_max_m": 0.114747,
-    "model_max_m": 0.12615931741055553,
+    "model_max_m": 0.11926016363250858,
     "exp_t_max_s": 48.137,
     "model_t_max_s": 48.137,
-    "rel_amp_diff": 0.09945634666314174
+    "rel_amp_diff": 0.03933143029890606
   },
   "x225_first_pass": {
     "exp_max_m": 0.170149,
-    "model_max_m": 0.188031758114654,
+    "model_max_m": 0.1700212458589534,
     "exp_t_max_s": 94.8717,
     "model_t_max_s": 94.8717,
-    "rel_amp_diff": 0.10510057722733608
+    "rel_amp_diff": -0.0007508368609077853
   },
   "x225_reflection": {
     "exp_max_m": 0.133773,
-    "model_max_m": 0.14294851389406005,
+    "model_max_m": 0.1484448665555096,
     "exp_t_max_s": 116.7686,
-    "model_t_max_s": 117.37337746573272
+    "model_t_max_s": 117.2138354534375
   },
-  "solver": "waveFlowX-3D 2.60.14"
+  "build_record": ""
 }

@@ -1,3 +1,3 @@
-! Sriram et al. (2016) gauges: x y [m]
-60.000000 0.000000
-225.000000 0.000000
+! Sriram et al. (2016) gauges x = 60 and 225 m, in NHWAVE coordinates (x - 55 m): x y [m]
+5.000000 0.000000
+170.000000 0.000000

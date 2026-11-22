@@ -8,13 +8,16 @@ Experiment (Sriram et al. 2016, Table 1 test 2/3, Fig. 4e,f): h0 = 1.0 m, H = 0.
 piston; gauges at x = 60 m and x = 225 m from the wave maker; toe of the 1:6 beach at x = 251.5 m.
 
 Model (Section 3.2 of the accompanying paper): eta = H sech^2(k (x - x_c)), k = gamma k0, k0 = sqrt(3 H / 4 h0^3),
-gamma = 0.21 (L_e = 2 pi / k = 99.4 m, T_e = L_e / C = 30.0 s with C = sqrt(g (h0 + H))); u = C eta / (h0 + eta),
-uniform over the depth; w from continuity, w = -(z + h0) du/dx (the bed is flat where the pulse is). Crest at x_c = -50 m. Domain -150 m to 270 m: the
-initial pulse is 1.6e-6 m high at the west wall. The x coordinate is that of the experiment from x = 0 on (gauges and
-beach at their experimental positions); the experimental time origin is not known relative to the model's, so the
-comparison shifts the model time by one constant fixed by the crest at x = 60 m, and x = 225 m is compared with the
-same shift.
-dx = 0.04 h0, Kglob = 10 uniform layers, CFL = 0.25, free-slip bed and walls, wet/dry on the beach (MinDep).
+gamma = 0.21 (L_e = 2 pi / k = 99.7 m, T_e = L_e / C = 30.1 s with C = sqrt(g (h0 + H))); u = C eta / (h0 + eta),
+uniform over the depth; w from continuity, w = -(z + h0) du/dx (the bed is flat where the pulse is).
+Coordinates: model x = experimental x - 55 m (the coordinates of the NHWAVE setup in ../nhwave-setup-comparison).
+Crest at model x_c = -49.7 m (experimental 5.3 m, 54.7 m before the first gauge). Domain model -100 m to 215 m
+(experimental -45 m to 270 m): the initial pulse is 8.5e-4 m high at the west wall. Gauges at model x = 5 m and 170 m
+(experimental 60 m and 225 m), toe of the beach at model x = 196.5 m. The experimental time origin is not known
+relative to the model's, so the comparison shifts the model time at each gauge so that its first maximum falls on the
+measured one (myPost/plot_sriram.py, fourth argument 55 = the coordinate offset).
+dx = 0.04 h0, Kglob = 10 uniform layers, CFL = 0.25, free-slip bed and walls, wet/dry on the beach (MinDep 0.005 m),
+100 s simulated.
 
 Base: scripts/input.template.txt (the input of the paper's conical-island runs), numerics as those runs: SECOND/SECOND, GMRES with PFMG, PRESSURE_PROJECTION = LEGACY, PRESSURE_BED = LEGACY, level 1.
 """
@@ -23,19 +26,19 @@ import numpy as np
 
 case = Path(__file__).resolve().parents[1]
 g = 9.81
-h0, H, gamma, xc = 1.0, 0.12, 0.21, -50.0
-toe, slope, land = 251.5, 1.0 / 6.0, 1.0       # beach rises to z = +1 m (depth -1 m) and stays flat
+h0, H, gamma, xc = 1.0, 0.12, 0.21, -49.7
+toe, slope, land = 251.5 - 55.0, 1.0 / 6.0, 1.0       # beach rises to z = +1 m (depth -1 m) and stays flat
 dx = 0.04 * h0
-xmin, xmax = -150.0, 270.0
-nx = int(round((xmax - xmin) / dx))           # 10500
+xmin, xmax = -100.0, 215.0
+nx = int(round((xmax - xmin) / dx))           # 7875
 nz = 10
 
 CHANGES = dict(
-    TITLE='sriram2016_gwk_solitary_like', RESULT_FOLDER='./OUTPUT/',
+    TITLE='apor_sriram_S3r', RESULT_FOLDER='./OUTPUT/',
     Mglob=nx, Nglob=1, Kglob=nz, DX=dx, DY=dx, XMIN=xmin, YMIN=-dx / 2,
     PX=6, PY=1, DT_INI=0.001, DT_MAX=0.02, CFL=0.25,
-    TOTAL_TIME=110, PLOT_START=0, PLOT_INTV=10,
-    MinDep=0.001,
+    TOTAL_TIME=100, PLOT_START=0, PLOT_INTV=10,
+    MinDep=0.005,
     BATHYMETRY_TYPE='FILE', INITIAL_EUVW='T',
     WAVE='OFF',
     BC_X0=1, BC_Xn=1, BC_Y0=1, BC_Yn=1, BC_Z0=1, BC_Zn=1,
@@ -55,7 +58,7 @@ ADDED = dict(
 def main():
     import argparse
     parser = argparse.ArgumentParser()
-    parser.add_argument('--px', type=int, default=6, help='MPI ranks in x (the published run used 42)')
+    parser.add_argument('--px', type=int, default=6, help='MPI ranks in x (the published run used 63)')
     CHANGES['PX'] = parser.parse_args().px
     lines = (case / 'scripts/input.template.txt').read_text().splitlines()
     seen, out = set(), []
@@ -72,7 +75,7 @@ def main():
     missing = set(CHANGES) - seen
     if missing:
         raise SystemExit(f'keys not in the template: {sorted(missing)}')
-    out.append('! ---- added for sriram2016-gwk-solitary-like-20261121 (scripts/make_input.py) ----')
+    out.append('! ---- added by scripts/make_inputs.py (S3) ----')
     out += [f'{k} = {v}' for k, v in ADDED.items()]
     (case / 'input.txt').write_text('\n'.join(out) + '\n')
 
@@ -94,8 +97,8 @@ def main():
                             surfaceW0=w).items():
         np.savetxt(case / f'INPUT/{name}.txt', np.atleast_2d(field), fmt='%.9e')
     with open(case / 'stations.txt', 'w') as f:
-        f.write('! Sriram et al. (2016) gauges: x y [m]\n')
-        for xs in (60.0, 225.0):
+        f.write('! Sriram et al. (2016) gauges x = 60 and 225 m, in NHWAVE coordinates (x - 55 m): x y [m]\n')
+        for xs in (5.0, 170.0):
             f.write(f'{xs:.6f} 0.000000\n')
     print(f'nx={nx} k={k:.5f} L_e={2 * np.pi / k:.2f} m T_e={2 * np.pi / k / C:.2f} s C={C:.4f} '
           f'eta(west wall)={wave[0]:.2e} max|w|={np.abs(w).max():.3e}')

@@ -27,6 +27,13 @@ case = Path(__file__).resolve().parents[1]
 res = Path(sys.argv[1])
 figdir = Path(sys.argv[2])
 ALIGN = sys.argv[3] if len(sys.argv) > 3 else 'per-gauge'
+# Grid of the run from its own input; X_OFFSET (4th argument, default 0) converts model x to experimental x
+# (55 m for runs set up in the coordinates of the APOR NHWAVE run, where model x = experimental x - 55 m).
+import re
+_inp = (res / 'input.txt').read_text()
+XMIN_RUN = float(re.search(r'^XMIN *= *(\S+)', _inp, re.M)[1])
+DX_RUN = float(re.search(r'^DX *= *(\S+)', _inp, re.M)[1])
+X_OFFSET = float(sys.argv[4]) if len(sys.argv) > 4 else 0.0
 plt = funApplyStyle()
 g, h0, H, gamma, xc = 9.81, 1.0, 0.12, 0.21, -50.0
 dx, xmin = 0.04, -150.0
@@ -62,7 +69,9 @@ if ALIGN == 'per-gauge':
     tm225 = tm225 + shift225
     m = tm225 <= 105.0 + shift225
 metrics = dict(time_shift_s=float(shift), align=ALIGN, time_shift_x225_s=float(shift + shift225),
-               offset_x225_from_x60_shift_s=shift225, C=float(C), gamma=gamma, crest_x0_m=xc)
+               offset_x225_from_x60_shift_s=shift225, C=float(C), gamma=gamma,
+               crest_x0_m=float(XMIN_RUN + X_OFFSET + (np.argmax(np.loadtxt(res / 'INPUT/surfaceEta0.txt')) + 0.5) * DX_RUN),
+               x_offset_m=X_OFFSET)
 for lab, (te, ee, tm, em, mm, mme) in dict(
         x60=(te60, ee60, tm60, em60, np.ones_like(tm60, bool), np.ones_like(te60, bool)),
         x225_first_pass=(te225, ee225, tm225, em225, m, me)).items():
@@ -75,6 +84,7 @@ if r.any() and re_.any():
     metrics['x225_reflection'] = dict(exp_max_m=float(ee225[re_].max()), model_max_m=float(em225[r].max()),
                                       exp_t_max_s=float(te225[re_][np.argmax(ee225[re_])]),
                                       model_t_max_s=float(tm225[r][np.argmax(em225[r])]))
+metrics['build_record'] = (res / 'BUILD_RECORD').read_text() if (res / 'BUILD_RECORD').exists() else ''
 (res / 'metrics_sriram.json').write_text(json.dumps(metrics, indent=2))
 print(json.dumps({k: v for k, v in metrics.items() if k != 'build_record'}, indent=2))
 
@@ -108,9 +118,9 @@ fig.savefig(figdir / 'validationSriramEF.png', dpi=150)
 # setup figure from the run's own input files
 depth = np.loadtxt(res / 'INPUT/depthc.txt')
 eta0 = np.loadtxt(res / 'INPUT/surfaceEta0.txt')
-x = xmin + (np.arange(depth.size) + 0.5) * dx
+x = XMIN_RUN + X_OFFSET + (np.arange(depth.size) + 0.5) * DX_RUN
 fig, axes = plt.subplots(1, 2, figsize=(11, 3.4))
-for ax, lab, xl, yl in [(axes[0], figureLabel[0], (-150, 270), (-1.1, 0.3)), (axes[1], figureLabel[1], (220, 270), (-1.2, 1.2))]:
+for ax, lab, xl, yl in [(axes[0], figureLabel[0], (x[0] - DX_RUN / 2, x[-1] + DX_RUN / 2), (-1.1, 0.3)), (axes[1], figureLabel[1], (220, 270), (-1.2, 1.2))]:
     wet = depth > 0
     ax.fill_between(x, -depth, np.where(wet, eta0, -depth), color='#4f8fd8', lw=0, label='Water')
     ax.fill_between(x, yl[0], -depth, color='#c8b88a', lw=0, label='Bed')
